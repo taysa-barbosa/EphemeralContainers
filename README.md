@@ -4,7 +4,7 @@
 <img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
 </p>
 
-## O que são Ephemeral Containers?
+## O que são Ephemeral Containers?[^1]
 
 * Os contêineres efêmeros são um novo tipo de contêiner que faz parte da API principal do Kubernetes.
 Um contêiner efêmero pode ser adicionado a um pod existente para ações administrativas como depuração,
@@ -21,33 +21,27 @@ o kubectl exec para solucionar
  * Podemos usar o kubectl debug para adicionar um contêiner efêmero e testar o serviço de back-end:
 
 
+# Exemplo de depuração usando contêineres efêmeros [^2]
+
+ Exemplo de imagem que não contém utilitários de depuração, rode o seguinte comando
  
 ```markdown 
-kubectl debug -it goapp --image=gcr.io/distroless/python3 --share-processes --copy-to=goapp-debug
+kubectl run ephemeral-demo --image=registry.k8s.io/pause:3.1 --restart=Never
 ```
-
-# Crie uma imagens de contêiner "distroless"
-
-* As imagens "distroless" contêm apenas seu aplicativo e suas dependências de tempo de execução. Eles não contêm gerenciadores de pacotes, shells ou quaisquer outros programas
+Se você tentar usar o kubectl exec para criar um shell, verá um erro porque não há shell nesta imagem de contêiner.
 
 ```markdown 
-# Start by building the application.
-FROM golang:1.18 as build
-
-WORKDIR /go/src/app
-COPY . .
-
-RUN go mod download
-RUN CGO_ENABLED=0 go build -o /go/bin/app
-
-# Now copy it into our base image.
-FROM gcr.io/distroless/static-debian11
-COPY --from=build /go/bin/app /
-CMD ["/app"]
+kubectl exec -it ephemeral-demo -- sh
 ```
-* Va até o diretório e execute
+
+Em vez disso, você pode adicionar um contêiner de depuração usando kubectl debug.
 
 ```markdown 
-docker build -t myapp .
-docker run -t myapp
+kubectl debug ephemeral-demo -it --image=ubuntu --share-processes --copy-to=ephemeral-demo-debug
 ```
+
+
+
+[^1]: [Ephemeral Containers](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/).
+[^2]: [Debug Running Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container).
+ 
