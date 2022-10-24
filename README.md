@@ -21,7 +21,7 @@ o kubectl exec para solucionar
  * Podemos usar o kubectl debug para adicionar um contêiner efêmero e testar o serviço de back-end:
 
 
-# Exemplo de depuração usando contêineres efêmeros [^2]
+# Exemplo de depuração usando contêineres efêmeros 
 
  Exemplo de imagem que não contém utilitários de depuração, rode o seguinte comando
  
@@ -67,6 +67,6 @@ Os contêineres efêmeros são úteis quando o kubectl exec é insuficiente porq
 Em particular, as imagens distroless permitem que você implante imagens de contêiner mínimas que reduzem a superfície de ataque e a exposição a bugs e vulnerabilidades. Como as imagens distroless não incluem um shell ou utilitários de depuração, é difícil solucionar problemas de imagens distroless usando apenas o kubectl exec.
 
 [^1]: [Ephemeral Containers](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/).
-[^2]: [Debug Running Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container).
+
 
 
