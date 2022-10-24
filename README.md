@@ -25,23 +25,41 @@ o kubectl exec para solucionar
 
  Exemplo de imagem que não contém utilitários de depuração, rode o seguinte comando
  
-```markdown 
+```
 kubectl run ephemeral-demo --image=registry.k8s.io/pause:3.1 --restart=Never
 ```
 Se você tentar usar o kubectl exec para criar um shell, verá um erro porque não há shell nesta imagem de contêiner.
 
-```markdown 
+```
 kubectl exec -it ephemeral-demo -- sh
 ```
 
-Em vez disso, você pode adicionar um contêiner de depuração usando kubectl debug.
+Execute este comando para criar uma cópia de ephemeral-demo chamada ephemeral-demo-debug que adiciona um novo contêiner do Ubuntu para depuração:
 
-```markdown 
+``` 
 kubectl debug ephemeral-demo -it --image=ubuntu --share-processes --copy-to=ephemeral-demo-debug
 ```
+*O --share-processes permite que os contêineres neste pod vejam os processos de outros contêineres no pod*. 
 
 
+Você pode visualizar o estado do contêiner efêmero recém-criado usando:
+
+```
+kubectl describe pod ephemeral-demo
+```
+Use kubectl delete para remover o pod quando terminar:
+
+```
+kubectl delete pod ephemeral-demo
+```
+
+# Considerações 
+
+Os contêineres efêmeros são úteis quando o kubectl exec é insuficiente porque um contêiner travou ou uma imagem de contêiner não inclui utilitários de depuração.
+
+Em particular, as imagens distroless permitem que você implante imagens de contêiner mínimas que reduzem a superfície de ataque e a exposição a bugs e vulnerabilidades. Como as imagens distroless não incluem um shell ou utilitários de depuração, é difícil solucionar problemas de imagens distroless usando apenas o kubectl exec.
 
 [^1]: [Ephemeral Containers](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/).
 [^2]: [Debug Running Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container).
- 
+
+
