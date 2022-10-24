@@ -33,6 +33,10 @@ Se você tentar usar o kubectl exec para criar um shell, verá um erro porque n�
 ```
 kubectl exec -it ephemeral-demo -- sh
 ```
+ A saida será parecida com:
+ 
+
+```error: Internal error occurred: error executing command in container: failed to exec in container```
 
 Execute este comando para criar uma cópia de ephemeral-demo chamada ephemeral-demo-debug que adiciona um novo contêiner do Ubuntu para depuração:
 
@@ -41,6 +45,9 @@ kubectl debug ephemeral-demo -it --image=ubuntu --share-processes --copy-to=ephe
 ```
 *O --share-processes permite que os contêineres neste pod vejam os processos de outros contêineres no pod*. 
 
+Observe que agora você terá:
+
+![image](https://user-images.githubusercontent.com/107519482/197559001-3b891154-2803-43e7-a40a-dd68dbe28726.png)
 
 Você pode visualizar o estado do contêiner efêmero recém-criado usando:
 
